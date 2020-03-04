@@ -61,6 +61,6 @@ gravity_y = -1000.0
 scale = 0.01
 
 [app_metrica]
-key = ff761a07-bc55-4174-b2c0-676cd923633f
+key = your_appmetrica_key
 is_debug = 0
 
