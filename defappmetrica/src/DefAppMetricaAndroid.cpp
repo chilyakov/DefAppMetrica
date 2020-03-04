@@ -59,7 +59,7 @@ void DefAppMetrica_setAppMetricaKey(const char*appMetricaKey)
   AttachScope attachscope;
   JNIEnv* env = attachscope.m_Env;
   jclass cls = GetClass(env, JAR_PATH);
-  jstring afkey = env->NewStringUTF(appsFlyerKey);
+  jstring afkey = env->NewStringUTF(appMetricaKey);
   jmethodID method = env->GetStaticMethodID(cls, "DefAppMetrica_setAppMetricaKey", "(Landroid/app/Activity;Ljava/lang/String;)V");
   env->CallStaticVoidMethod(cls, method, dmGraphics::GetNativeAndroidActivity(), afkey);
 
