@@ -19,4 +19,7 @@ public class DefAppMetrica {
 	public static void DefAppMetrica_trackEvent(Activity appActivity, String eventName, Map<String, Object> eventValue) {
         	YandexMetrica.reportEvent(String eventName, Map<String, Object> eventValue);
     	}
+	
+	public static void DefAppMetrica_setIsDebug(boolean debugMode) {
+    	}
 }
