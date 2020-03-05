@@ -1,5 +1,5 @@
 #define EXTENSION_NAME DefAppMetrica
-#define LIB_NAME "DefAppMetrica	"
+#define LIB_NAME "DefAppMetrica"
 #define MODULE_NAME "appmetrica"
 
 #define DLIB_LOG_DOMAIN LIB_NAME
@@ -89,8 +89,8 @@ static dmExtension::Result AppInitilizeDefAppMetricaDefAppMetrica(dmExtension::A
   appMetricaKey = dmConfigFile::GetString(params->m_ConfigFile, "app_metrica.key", 0);
   if (appMetricaKey)
   {
+    dmLogWarning("Call AppInitilizeDefAppMetricaDefAppMetrica", appMetricaKey);
     DefAppMetrica_setAppMetricaKey(appMetricaKey);
-    dmLogWarning("Call DefAppMetrica_setAppMetricaKey", appMetricaKey);
   }
   else
   {
