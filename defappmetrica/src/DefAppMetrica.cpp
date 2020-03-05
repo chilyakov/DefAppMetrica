@@ -90,6 +90,7 @@ static dmExtension::Result AppInitilizeDefAppMetricaDefAppMetrica(dmExtension::A
   if (appMetricaKey)
   {
     DefAppMetrica_setAppMetricaKey(appMetricaKey);
+    dmLogWarning("Call DefAppMetrica_setAppMetricaKey", appMetricaKey);
   }
   else
   {
