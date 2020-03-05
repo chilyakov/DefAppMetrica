@@ -12,8 +12,8 @@ public class DefAppMetrica {
 	public static void DefAppMetrica_setAppMetricaKey(final Activity appActivity, final String appMetricaKey) {
 		
 		YandexMetricaConfig config = YandexMetricaConfig.newConfigBuilder(appMetricaKey).build();		
-		YandexMetrica.activate(appActivity, config);
-            	YandexMetrica.enableActivityAutoTracking(appActivity);
+		YandexMetrica.activate(appActivity.getApplication(), config);
+            	YandexMetrica.enableActivityAutoTracking(appActivity.getApplication());
 	}
 
 	public static void DefAppMetrica_trackEvent(Activity appActivity, String eventName, Map<String, Object> eventValue) {
