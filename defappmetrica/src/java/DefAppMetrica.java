@@ -10,7 +10,7 @@ import java.util.Map;
 public class DefAppMetrica {
 
 	public static void DefAppMetrica_setAppMetricaKey(final Activity appActivity, final String appMetricaKey) {
-		
+		Log.debug("Call init: " + appMetricaKey);
 		YandexMetricaConfig config = YandexMetricaConfig.newConfigBuilder(appMetricaKey).build();		
 		YandexMetrica.activate(appActivity.getApplicationContext(), config);
             	YandexMetrica.enableActivityAutoTracking(appActivity.getApplication());
