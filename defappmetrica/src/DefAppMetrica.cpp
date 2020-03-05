@@ -1,19 +1,18 @@
 #define EXTENSION_NAME DefAppMetrica
 #define LIB_NAME "DefAppMetrica"
-#define MODULE_NAME LIB_NAME
+#define MODULE_NAME "appmetrica"
 
 #define DLIB_LOG_DOMAIN LIB_NAME
+#include <dmsdk/sdk.h>
 
 #if defined(DM_PLATFORM_ANDROID)
 #include "utils/LuaUtils.h"
 #include "DefAppMetrica.h"
 #include <stdlib.h>
 #include <jni.h>
-#include <dmsdk/sdk.h>
 
 dmArray<TrackData> list;
-
-const char* JAR_PATH = "com/chilaykov/defappmetrica/DefAppMetrica";
+const char* JAR_PATH = "com/chilyakov/defappmetrica/DefAppMetrica";
 
 static JNIEnv* Attach()
 {
@@ -33,17 +32,17 @@ static bool Detach(JNIEnv* env)
 }
 
 namespace {
-struct AttachScope
-{
-  JNIEnv* m_Env;
-  AttachScope() : m_Env(Attach())
+  struct AttachScope
   {
-  }
-  ~AttachScope()
-  {
-    Detach(m_Env);
-  }
-};
+    JNIEnv* m_Env;
+    AttachScope() : m_Env(Attach())
+    {
+    }
+    ~AttachScope()
+    {
+      Detach(m_Env);
+    }
+  };
 }
 
 static jclass GetClass(JNIEnv* env, const char* classname)
@@ -72,9 +71,9 @@ void DefAppMetrica_setAppMetricaKey(const char*appMetricaKey)
   jstring apkey = env->NewStringUTF(appMetricaKey);
   jmethodID method = env->GetStaticMethodID(cls, "DefAppMetrica_setAppMetricaKey", "(Landroid/app/Activity;Ljava/lang/String;)V");
   env->CallStaticVoidMethod(cls, method, dmGraphics::GetNativeAndroidActivity(), apkey);
-  dmLogWarning("Call DefAppMetrica_setAppMetricaKey", apkey);
+
   env->DeleteLocalRef(cls);
-  env->DeleteLocalRef(afkey);
+  env->DeleteLocalRef(apkey);
 }
 
 void DefAppMetrica_setIsDebug(bool is_debug)
@@ -188,8 +187,9 @@ static void LuaInit(lua_State* L)
 
 const char* appMetricaKey;
 
-static dmExtension::Result AppInitilizeDefAppMetricaDefAppMetrica(dmExtension::AppParams* params)
+static dmExtension::Result AppInitilize(dmExtension::AppParams* params)
 {
+  dmLogWarning("Registered %s Extension\n", MODULE_NAME);
   int isDebug = dmConfigFile::GetInt(params->m_ConfigFile, "app_metrica.is_debug", 0);
   if (isDebug && isDebug > 0)
   {
@@ -198,24 +198,22 @@ static dmExtension::Result AppInitilizeDefAppMetricaDefAppMetrica(dmExtension::A
   appMetricaKey = dmConfigFile::GetString(params->m_ConfigFile, "app_metrica.key", 0);
   if (appMetricaKey)
   {
-    dmLogWarning("Call AppInitilizeDefAppMetricaDefAppMetrica", appMetricaKey);
     DefAppMetrica_setAppMetricaKey(appMetricaKey);
   }
   else
   {
-    dmLogError("Pls add app_metrica.key to game.project\n");
+    dmLogError("Pls add app_mertica.key to game.project\n");
   }
-
   return dmExtension::RESULT_OK;
 }
 
-dmExtension::Result InitilizeDefAppMetrica(dmExtension::Params* params)
+dmExtension::Result Initilize(dmExtension::Params* params)
 {
   LuaInit(params->m_L);
   return dmExtension::RESULT_OK;
 }
 
-static void OnEventDefAppMetrica(dmExtension::Params* params, const dmExtension::Event* event)
+static void OnEvent(dmExtension::Params* params, const dmExtension::Event* event)
 {
 
   if (event->m_Event == dmExtension::EVENT_ID_ACTIVATEAPP)
@@ -225,11 +223,34 @@ static void OnEventDefAppMetrica(dmExtension::Params* params, const dmExtension:
 
 }
 
-dmExtension::Result FinalizeDefAppMetrica(dmExtension::Params* params)
+dmExtension::Result Finalize(dmExtension::Params* params)
 {
   return dmExtension::RESULT_OK;
 }
 
-#endif
+#else // unsupported platforms
 
-DM_DECLARE_EXTENSION(EXTENSION_NAME, LIB_NAME, AppInitilizeDefAppMetricaDefAppMetrica, 0, InitilizeDefAppMetrica, 0, OnEventDefAppMetrica, FinalizeDefAppMetrica)
+static dmExtension::Result AppInitilize(dmExtension::AppParams* params)
+{
+  dmLogWarning("Registered %s (null) Extension\n", MODULE_NAME);
+  return dmExtension::RESULT_OK;
+}
+
+static dmExtension::Result Initilize(dmExtension::Params* params)
+{
+  return dmExtension::RESULT_OK;
+}
+
+static void OnEvent(dmExtension::Params* params, const dmExtension::Event* event)
+{
+}
+
+static dmExtension::Result Finalize(dmExtension::Params* params)
+{
+  return dmExtension::RESULT_OK;
+}
+
+#endif // platforms
+
+
+DM_DECLARE_EXTENSION(EXTENSION_NAME, LIB_NAME, AppInitilize, 0, Initilize, 0, OnEvent, Finalize)
