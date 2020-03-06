@@ -12,7 +12,7 @@ public class DefAppMetrica {
 	public static void DefAppMetrica_setAppMetricaKey(final Activity appActivity, final String appMetricaKey) {
 		
 		YandexMetricaConfig config = YandexMetricaConfig.newConfigBuilder(appMetricaKey)
-			.withSessionTimeout(300)
+			.withSessionTimeout(30)
 			.withLogs()
 			.build();
 		YandexMetrica.activate(appActivity.getApplicationContext(), config);
